@@ -92,7 +92,7 @@ func (m UserModel) Insert(user *User) error {
 
 	args := []any{user.Name, user.Email, user.Password.hash, user.Activated}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	err := m.DB.QueryRowContext(ctx, query, args...).Scan(&user.ID, &user.CreatedAt, &user.Version)
@@ -125,7 +125,7 @@ func (m UserModel) GetByEmail(email string) (*User, error) {
 		&user.Email,
 		&user.Password.hash,
 		&user.Activated,
-		&user.Version
+		&user.Version,
 	)
 
 	if err != nil {
@@ -153,10 +153,10 @@ func (m UserModel) Update(user *User) error {
 		user.Password.hash,
 		user.Activated,
 		user.ID,
-		user.Version
+		user.Version,
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3 *time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	err := m.DB.QueryRowContext(ctx, query, args...).Scan(&user.Version)
