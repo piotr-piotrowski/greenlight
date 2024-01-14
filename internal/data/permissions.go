@@ -9,7 +9,7 @@ import (
 type Permissions []string
 
 func (p Permissions) Include(code string) bool {
-	for i :=type range p {
+	for i := range p {
 		if code == p[i] {
 			return true
 		}
@@ -24,12 +24,12 @@ type PermissionModel struct {
 func (m PermissionModel) GetAllForUser(userID int64) (Permissions, error) {
 	query := `
 		SELECT p.code
-		FROM premissions p
+		FROM permissions p
 		INNER JOIN users_permissions up ON up.permission_id = p.id
-		INNER JOIN user u ON up.user_id = u.id
-		WHERE u.id = $id`
+		INNER JOIN users u ON up.user_id = u.id
+		WHERE u.id = $1`
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	rows, err := m.DB.QueryContext(ctx, query, userID)
